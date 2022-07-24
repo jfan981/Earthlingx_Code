@@ -66,6 +66,9 @@ void setup() {
   myservoR.attach(servoRight);
   myservoJ.attach(servoJoint);
 
+  lcd.begin(16, 2);
+  lcd.home();
+
 }
 
 char uart_rec;  //uart receive from ESP32
