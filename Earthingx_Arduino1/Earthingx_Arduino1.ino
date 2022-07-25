@@ -69,12 +69,24 @@ void setup() {
   lcd.begin(16, 2);
   lcd.home();
 
+  //test
+  /*digitalWrite(13, HIGH);
+  delay(3000);
+  digitalWrite(13, LOW);
+  delay(3000);
+  digitalWrite(13, HIGH);
+  delay(3000);
+  digitalWrite(13, LOW);
+  delay(3000);
+*/
 }
 
 char uart_rec;  //uart receive from ESP32
 int valJ = 60;    // rotation degree of servo
 int pos = 0;
-int num = 0;
+int valL = 170;
+int valR = 0;
+int rhythm = 700;
 
 void loop() {
   if (Serial.available()) {
@@ -120,6 +132,7 @@ void loop() {
   }
   else if (uart_rec == '0') {             // set right servo to initial position (0 degree)
     myservoR.write(0);
+    myservoL.write(180);
     delay(20);
     uart_rec = ';';
   }
@@ -138,51 +151,56 @@ void loop() {
    uart_rec = ';';
   }
   else if (uart_rec == '3') {
-    for (pos = 40; pos <= 150; pos++) {    // increase degree from 40 - 150 slowly
+    for (pos = 40; pos <= 130; pos++) {    // increase degree from 40 - 150 slowly
       myservoR.write(pos);                // tell servo to go to position in variable 'pos'
       delay(20);                          // waits 20 ms for the servo to reach the position
     }
    uart_rec = ';';
   }
-  else if (uart_rec == '4') {               // pick parts lower
-    for (valJ = 30; valJ >= 5; valJ--) {    // decrease degree from 30 - 5 slowly
-      myservoJ.write(valJ);                // tell servo to go to position in variable 'valJ'
-      delay(20);                          // waits 20 ms for the servo to reach the position
-    }
+  else if (uart_rec == '4') {               // initial position
+    myservoJ.write(175);                // tell servo to go to initial position (180 degree)
     uart_rec = ';';
+    delay(20);  
   }
   else if (uart_rec == '5') {               // pick parts higher
-    for (valJ = 60; valJ >= 30; valJ--) {    // decrease degree from 60 - 30 slowly
+    for (valJ = 175; valJ >= 160; valJ--) {    // increase degree slowly
       myservoJ.write(valJ);                // tell servo to go to position in variable 'valJ'
       delay(20);                          // waits 20 ms for the servo to reach the position
     }
     uart_rec = ';';
   }
   else if (uart_rec == '6') {
-    myservoJ.write(60);                // tell servo to go to initial position (60 degree)
-    delay(20);  
+    for (valJ = 160; valJ >= 150; valJ--) {    // increase degree slowly
+      myservoJ.write(valJ);                // tell servo to go to position in variable 'valJ'
+      delay(20);                          // waits 20 ms for the servo to reach the position
+    }
     uart_rec = ';';
   }
   else if (uart_rec == '7') {              // after picking lower parts, go back to initial position
-    for (valJ = 5; valJ <= 30; valJ++) {    // increase degree from 5 - 30 slowly
+    for (valJ = 150; valJ >= 140; valJ--) {    // increase degree slowly
       myservoJ.write(valJ);                // tell servo to go to position in variable 'valJ'
       delay(20);                          // waits 20 ms for the servo to reach the position
     }
     uart_rec = ';';
   }
   else if (uart_rec == '8') {               // after picking higher parts, go back to initial position
-    for (valJ = 30; valJ <= 60; valJ++) {    // increase degree from 30 - 60 slowly
+    for (valJ = 140; valJ >= 130; valJ--) {    // increase degree slowly
       myservoJ.write(valJ);                // tell servo to go to position in variable 'valJ'
       delay(20);                          // waits 20 ms for the servo to reach the position
     }
     uart_rec = ';';
   }
   else if (uart_rec == '9') {                // drop parts
-    for (valJ = 60; valJ <= 175; valJ++) {    // increase degree from 60 - 175 slowly
+    for (valJ = 130; valJ >= 5; valJ--) {    // increase degree to end slowly
       myservoJ.write(valJ);                // tell servo to go to position in variable 'valJ'
-      delay(20);                          // waits 20 ms for the servo to reach the position
+      delay(10);                          // waits 20 ms for the servo to reach the position
     }
     uart_rec = ';';
+  }
+  else if (uart_rec == 'o') {
+    dancing();
+    uart_rec = ';';
+    delay(20);
   }
   /*
   else if (uart_rec == '+') {
@@ -506,4 +524,61 @@ void stopFace() {    // ^o^
   lcd.createChar(2, oval_mouth_left);
   lcd.setCursor(6,1);
   lcd.write(2);
+}
+
+void dancing() {
+  myservoL.write(130);
+  myservoR.write(10);
+  delay(rhythm);
+  myservoL.write(170);
+  myservoR.write(50);
+  delay(rhythm);
+  myservoL.write(110);
+  myservoR.write(30);
+  delay(rhythm);
+  myservoL.write(140);
+  myservoR.write(70);
+  delay(rhythm);
+  myservoL.write(100);
+  myservoJ.write(10);
+  myservoR.write(90);
+  delay(rhythm);
+  myservoL.write(140);
+  myservoJ.write(50);
+  myservoR.write(100);
+  delay(rhythm);
+  myservoL.write(120);
+  myservoJ.write(20);
+  myservoR.write(100);
+  delay(rhythm);
+  myservoL.write(170);
+  myservoJ.write(60);
+  myservoR.write(10);
+  delay(rhythm);
+  delay(20);
+  //hey
+  for (valR = 10; valR < 80; valR+=2) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(10);
+  }
+  delay(40);
+  for (valR = 80; valR > 10; valR-=2) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(10);
+  }
+  delay(500);
+  for (valR = 10; valR < 80; valR+=2) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(10);
+  }
+  delay(40);
+  for (valR = 80; valR > 10; valR-=2) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(10);
+  }
+
 }
