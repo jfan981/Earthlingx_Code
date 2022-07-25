@@ -69,7 +69,7 @@ void setup() {
   lcd.begin(16, 2);
   lcd.home();
 
-  //test
+  //test connection
   /*digitalWrite(13, HIGH);
   delay(3000);
   digitalWrite(13, LOW);
@@ -86,7 +86,7 @@ int valJ = 60;    // rotation degree of servo
 int pos = 0;
 int valL = 170;
 int valR = 0;
-int rhythm = 700;
+int rhythm = 555;
 
 void loop() {
   if (Serial.available()) {
@@ -119,14 +119,6 @@ void loop() {
     stopFace();
     uart_rec = ';';
   }
-/*  else if (uart_rec == '0' || uart_rec == '1' || uart_rec == '2' || uart_rec == '3' || uart_rec == '4' || uart_rec == '5' || uart_rec == '6' ) {
-    valR = int(uart_rec);
-    valR = valR * 30;
-    myservoR.write(valR);
-    delay(20);
-  }*/
-//    valR = map(valR, 0, 6, 0, 180);
-  
   else if (uart_rec == ';') {
     ;   // stop mode
   }
@@ -151,7 +143,7 @@ void loop() {
    uart_rec = ';';
   }
   else if (uart_rec == '3') {
-    for (pos = 40; pos <= 130; pos++) {    // increase degree from 40 - 150 slowly
+    for (pos = 40; pos <= 110; pos++) {    // increase degree from 40 - 110 slowly
       myservoR.write(pos);                // tell servo to go to position in variable 'pos'
       delay(20);                          // waits 20 ms for the servo to reach the position
     }
@@ -202,43 +194,6 @@ void loop() {
     uart_rec = ';';
     delay(20);
   }
-  /*
-  else if (uart_rec == '+') {
-    for (pos = 0; pos <= 25; pos++) {    // increase degree from 40 - 150 slowly
-      myservoJ.write(pos);                // tell servo to go to position in variable 'pos'
-      delay(20);                          // waits 20 ms for the servo to reach the position
-    }
-   uart_rec = ';';
-  }
-  else if (uart_rec == '-') {
-    for (pos = 0; pos <= 25; pos++) {    // increase degree from 40 - 150 slowly
-      myservoJ.write(pos);                // tell servo to go to position in variable 'pos'
-      delay(20);                          // waits 20 ms for the servo to reach the position
-    }
-   uart_rec = ';';
-  }
-  
-
- 
-  else if (uart_rec == '+') {
-    int i = valR;
-    while(i >= 0 && i <= valR + 5 && i <= 180) {
-      i++;
-      myservoR.write(i);
-      delay(20);
-    }
-    
-  }
-  else if (uart_rec == '-') {
-    int i = valR;
-    while(i >= 0 && i >= valR - 5 && i <= 180) {
-      i--;
-      myservoR.write(i);
-      delay(20);
-    }
-    valR = i;
-  }*/
- // else if (uart_rec == '7' || uart_rec == '1' || uart_rec == '2' || uart_rec == '3'
   delay(20);
 }
 
@@ -527,6 +482,7 @@ void stopFace() {    // ^o^
 }
 
 void dancing() {
+  happyFace();
   myservoL.write(130);
   myservoR.write(10);
   delay(rhythm);
@@ -539,6 +495,7 @@ void dancing() {
   myservoL.write(140);
   myservoR.write(70);
   delay(rhythm);
+  stopFace();
   myservoL.write(100);
   myservoJ.write(10);
   myservoR.write(90);
@@ -556,29 +513,77 @@ void dancing() {
   myservoR.write(10);
   delay(rhythm);
   delay(20);
-  //hey
+  
+  //hail
+  moveLeft();
   for (valR = 10; valR < 80; valR+=2) {
     myservoR.write(valR);
     myservoL.write(180-valR);
     delay(10);
   }
   delay(40);
+  moveForward();
   for (valR = 80; valR > 10; valR-=2) {
     myservoR.write(valR);
     myservoL.write(180-valR);
     delay(10);
   }
-  delay(500);
-  for (valR = 10; valR < 80; valR+=2) {
-    myservoR.write(valR);
-    myservoL.write(180-valR);
-    delay(10);
-  }
-  delay(40);
-  for (valR = 80; valR > 10; valR-=2) {
-    myservoR.write(valR);
-    myservoL.write(180-valR);
-    delay(10);
-  }
+  stopMove();
+  delay(400);
 
+  // hail
+  moveRight();
+  for (valR = 10; valR < 80; valR+=2) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(10);
+  }
+  delay(40);
+  moveForward();
+  for (valR = 80; valR > 10; valR-=2) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(10);
+  }
+  stopMove();
+  delay(400);
+  moveBackward();
+  for (valR = 10; valR < 90; valR+=1) {
+    myservoR.write(valR);
+    myservoL.write(180-valR);
+    delay(20);
+  }
+  stopMove();
+
+  delay(500);
+  moveRight();
+  myservoL.write(70);
+  myservoR.write(70);
+  delay(rhythm);
+  myservoL.write(110);
+  myservoR.write(110);
+  delay(rhythm);
+  myservoL.write(70);
+  myservoR.write(70);
+  delay(rhythm);
+  myservoL.write(110);
+  myservoR.write(110);
+  delay(rhythm);
+  moveLeft();
+  myservoL.write(70);
+  myservoR.write(70);
+  delay(rhythm);
+  myservoL.write(110);
+  myservoR.write(110);
+  delay(rhythm);
+  myservoL.write(60);
+  myservoR.write(60);
+  delay(rhythm);
+  myservoL.write(120);
+  myservoR.write(120);
+  delay(rhythm);
+  stopMove();
+  myservoL.write(90);
+  myservoR.write(90);
+  delay(rhythm);
 }
