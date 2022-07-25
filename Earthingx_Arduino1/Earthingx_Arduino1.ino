@@ -84,7 +84,7 @@ void setup() {
 char uart_rec;  //uart receive from ESP32
 int valJ = 60;    // rotation degree of servo
 int pos = 0;
-int valL = 170;
+int valL = 180;
 int valR = 0;
 int rhythm = 555;
 
